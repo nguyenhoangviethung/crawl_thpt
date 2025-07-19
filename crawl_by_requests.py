@@ -13,7 +13,7 @@ def get_with_retry(url, retries=3, delay=1):
                 if data_json.get("data"):
                     return data_json
         except Exception as e:
-            print(f"Lỗi retry lần {attempt+1} với URL {url}: {e}")
+            pass
         time.sleep(delay + attempt * 0.5)
     return None
 

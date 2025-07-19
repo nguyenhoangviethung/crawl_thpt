@@ -2,8 +2,7 @@ __pycache__/
 venv/
 .env
 test.py
-crawl_missing.py
-crawl_with_threads.py
+
 data_by_province_res/
 data_by_province/
 ma_tinh.csv
