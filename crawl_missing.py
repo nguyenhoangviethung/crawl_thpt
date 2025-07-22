@@ -12,7 +12,7 @@ def get_with_retry(url, retries=3, delay=1):
             response = requests.get(url, timeout=10)
             if response.status_code == 200:
                 data_json = response.json()
-                if data_json.get("data"):
+                if data_json.get('data'):
                     return data_json
         except Exception as e:
             pass
@@ -34,14 +34,14 @@ def crawl_range(ma_tinh_str, start_idx = 1, end_idx = 199999, list_missing = Non
     else:
         list_crawl = range(start_idx, end_idx + 1)
     for i in list_crawl:
-        sbd = ma_tinh_str + f"{i:06d}"
+        sbd = ma_tinh_str + f'{i:06d}'
         URL = os.getenv('URL')
         url = URL.replace('SBD',sbd)
 
         data_json = get_with_retry(url)
 
-        if data_json is None or not data_json.get("data"):
-            print(f"Không có dữ liệu cho {sbd}")
+        if data_json is None or not data_json.get('data'):
+            print(f'Không có dữ liệu cho {sbd}')
             missing_sbd.append(sbd)
             no_data_count += 1
             if no_data_count >= 20:
@@ -55,13 +55,13 @@ def crawl_range(ma_tinh_str, start_idx = 1, end_idx = 199999, list_missing = Non
             for col in drop_cols:
                 row.pop(col, None)
             df_tinh = pd.concat([df_tinh, pd.DataFrame([row])], ignore_index=True)
-            print(f"{sbd} → {row}")
+            print(f'{sbd} → {row}')
 
         except Exception as e:
             continue
 
-    os.makedirs("data_by_province", exist_ok=True)
-    output_file = f"data_by_province/diem_{ma_tinh_str}_1_199999.csv"
+    os.makedirs('data_by_province', exist_ok=True)
+    output_file = f'data_by_province/diem_{ma_tinh_str}_1_199999.csv'
     if os.path.exists(output_file):
         try:
             df = pd.read_csv(output_file, encoding='utf-8-sig')
@@ -71,26 +71,26 @@ def crawl_range(ma_tinh_str, start_idx = 1, end_idx = 199999, list_missing = Non
         df = pd.DataFrame()
 
     df = pd.concat([df,df_tinh],ignore_index=True)
-    df.drop_duplicates(subset=["SBD"], keep="first", inplace=True)
-    df.sort_values(by="SBD", inplace=True)
-    df.to_csv(f"data_by_province_res/diem_{ma_tinh_str}_res.csv", index=False, encoding='utf-8-sig') # chỉ cần 1 lần cào lại missing là xong
+    df.drop_duplicates(subset=['SBD'], keep='first', inplace=True)
+    df.sort_values(by='SBD', inplace=True)
+    df.to_csv(f'data_by_province_res/diem_{ma_tinh_str}_res.csv', index=False, encoding='utf-8-sig') # chỉ cần 1 lần cào lại missing là xong
     
-    pd.DataFrame(missing_sbd, columns=['SBD']).to_csv(f"data_by_province/missing_{ma_tinh_str}_1_199999.csv", index=False, encoding='utf-8-sig')
+    pd.DataFrame(missing_sbd, columns=['SBD']).to_csv(f'data_by_province/missing_{ma_tinh_str}_1_199999.csv', index=False, encoding='utf-8-sig')
 
-    return f"{ma_tinh_str} xong: {len(df_tinh)} dòng"
+    return f'{ma_tinh_str} xong: {len(df_tinh)} dòng'
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     max_threads = 7 
     provinces = list(range(1, 65))
     provinces.sort()
-    folder_path = "data_by_province"
+    folder_path = 'data_by_province'
 
     with ThreadPoolExecutor(max_workers=max_threads) as executor:
         futures = []
 
         for ma_tinh in provinces:
-            ma_tinh_str = f"{ma_tinh:02d}"
-            missing_file = os.path.join(folder_path, f"missing_{ma_tinh_str}_1_199999.csv")
+            ma_tinh_str = f'{ma_tinh:02d}'
+            missing_file = os.path.join(folder_path, f'missing_{ma_tinh_str}_1_199999.csv')
             
             if os.path.exists(missing_file):
                 try:
