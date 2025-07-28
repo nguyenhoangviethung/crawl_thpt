@@ -5,6 +5,4 @@ test.py
 
 data_by_province_res/
 data_by_province/
-diem_thi_thpt_2025.csv
-diem_test.csv
-diem_thpt_2025_cac_khoi_thi.csv
+*.csv
