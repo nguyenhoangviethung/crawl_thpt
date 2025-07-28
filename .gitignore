@@ -1,0 +1,8 @@
+__pycache__/
+venv/
+.env
+test.py
+
+data_by_province_res/
+data_by_province/
+*.csv
